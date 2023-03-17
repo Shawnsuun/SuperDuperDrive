@@ -127,8 +127,3 @@ You aren't required to understand hashing or encryption and that's why your tech
 [Encryption](https://en.wikipedia.org/wiki/Encryption)
 
 All of us here at Super*Duper*Drive wish you good luck with the project!
-#   S u p e r D u p e r D r i v e  
- #   S u p e r D u p e r D r i v e  
- #   S u p e r D u p e r D r i v e  
- #   S u p e r D u p e r D r i v e  
- 
