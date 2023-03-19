@@ -12,7 +12,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Base64;
 
-@Service
+@Component
 public class HashService {
 
     public final Logger logger = LoggerFactory.getLogger(HashService.class);
