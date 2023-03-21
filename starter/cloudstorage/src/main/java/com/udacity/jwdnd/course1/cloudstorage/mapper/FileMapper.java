@@ -29,8 +29,9 @@ public interface FileMapper {
             "#{fileData})")
 
     @Options(useGeneratedKeys = true, keyProperty = "fileId")
-    int addFile(File file);
+    Integer addFile(File file);
+
 
     @Delete("DELETE FROM FILES WHERE fileId = #{fileId}")
-    void delete(int fileId);
+    Integer delete(int fileId);
 }

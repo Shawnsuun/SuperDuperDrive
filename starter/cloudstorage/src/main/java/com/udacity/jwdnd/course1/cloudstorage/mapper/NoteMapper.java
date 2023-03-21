@@ -17,8 +17,11 @@ public interface NoteMapper {
             "#{noteId}, #{username}, #{title}, #{description}, #{userId})")
 
     @Options(useGeneratedKeys = true, keyProperty = "noteId")
-    int addNote(Note chatMessage);
+    Integer addNote(Note note);
+
+    @Update("UPDATE notes SET title = #{title}, description = #{description} WHERE noteId = #{noteId}")
+    Integer update(Note note);
 
     @Delete("DELETE FROM NOTES WHERE noteId = #{noteId}")
-    void delete(Integer noteId);
+    Integer delete(Integer noteId);
 }

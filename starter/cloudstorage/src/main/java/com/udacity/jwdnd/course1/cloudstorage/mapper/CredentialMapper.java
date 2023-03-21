@@ -13,7 +13,7 @@ public interface CredentialMapper {
     List<Credential> getUserCredentials(Integer userId);
 
     @Select("SELECT FROM CREDENTIALS WHERE credentialId = #{credentialId}")
-    Note getCredential(Integer credentialId);
+    Credential getCredential(Integer credentialId);
 
     @Select("SELECT * FROM CREDENTIALS")
     List<Credential> getAllCredentials();
@@ -21,9 +21,16 @@ public interface CredentialMapper {
     @Insert("INSERT INTO NOTES(credentialId, username, password, url, userId, key) VALUES (" +
             "#{credentialId}, #{username}, #{password}, #{url}, #{userId}, #{key})")
 
-    @Options(useGeneratedKeys = true, keyProperty = "noteId")
-    int addCredential(Note chatMessage);
+    @Options(useGeneratedKeys = true, keyProperty = "credentialId")
+    Integer addCredential(Credential credential);
+
+    @Update("UPDATE credentials " +
+            "SET username=#{username}, " +
+            "password=#{password}, " +
+            "url=#{url} " +
+            "WHERE credentialId = #{credentialId}")
+    Integer update(Credential credential);
 
     @Delete("DELETE FROM NOTES WHERE credentialId = #{credentialId}")
-    void delete(Integer credentialId);
+    Integer delete(Integer credentialId);
 }
