@@ -17,7 +17,7 @@ public class File {
         this.fileData = fileData;
     }
 
-    public int getFileId() {
+    public Integer getFileId() {
         return fileId;
     }
 
@@ -25,7 +25,7 @@ public class File {
         return fileName;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 

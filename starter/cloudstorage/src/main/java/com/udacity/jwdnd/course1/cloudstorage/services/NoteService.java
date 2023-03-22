@@ -29,15 +29,15 @@ public class NoteService {
         return noteMapper.getNote(noteId);
     }
 
-    Integer addNote(Note note) {
+    public Integer addNote(Note note) {
         return noteMapper.addNote(note);
     }
 
-    Integer update(Note note) {
+    public Integer update(Note note) {
         return noteMapper.update(note);
     }
 
-    Integer delete(Integer noteId) {
+    public Integer delete(Integer noteId) {
         return noteMapper.delete(noteId);
     }
 }

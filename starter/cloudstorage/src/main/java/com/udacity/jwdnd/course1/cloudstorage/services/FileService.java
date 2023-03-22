@@ -2,17 +2,21 @@ package com.udacity.jwdnd.course1.cloudstorage.services;
 
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.NoteMapper;
+import com.udacity.jwdnd.course1.cloudstorage.mapper.UserMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.util.List;
 
 @Service
 public class FileService {
 
     private FileMapper fileMapper;
+    private UserMapper userMapper;
 
     public FileService(FileMapper fileMapper) {
         this.fileMapper = fileMapper;
@@ -27,6 +31,10 @@ public class FileService {
         return fileMapper.getFile(fileId);
     }
 
+    public File getUserFile(Integer userId, String fileName) {
+        return fileMapper.getUserFile(userId, fileName);
+    }
+
     public List<File> getUserFiles(Integer userId) {
         return fileMapper.getUserFiles(userId);
     }
@@ -35,11 +43,24 @@ public class FileService {
         return fileMapper.getAllFiles();
     }
 
-    Integer addFile(File file) {
-        return fileMapper.addFile(file);
+    public Integer addFile(MultipartFile uploadFile, String userName) throws IOException {
+        Integer fileId = null;
+        String fileName = uploadFile.getOriginalFilename();
+        Integer userId = userMapper.getUserId(userName);
+        String contentType = uploadFile.getContentType();
+        String fileSize = String.valueOf(uploadFile.getSize());
+        byte[] fileData = uploadFile.getBytes();
+        return fileMapper.addFile(
+            new File(
+                fileId,
+                fileName,
+                userId,
+                contentType,
+                fileSize,
+                fileData));
     }
 
-    Integer delete(int fileId) {
+    public Integer delete(int fileId) {
         return fileMapper.delete(fileId);
     }
 }
