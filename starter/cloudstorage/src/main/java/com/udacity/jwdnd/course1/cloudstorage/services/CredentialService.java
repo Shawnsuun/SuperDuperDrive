@@ -37,11 +37,11 @@ public class CredentialService {
         return credentialMapper.addCredential(credential);
     }
 
-    Integer update(Credential credential) {
+    public Integer update(Credential credential) {
         return credentialMapper.update(credential);
     }
 
-    Integer delete(Integer credentialId) {
+    public Integer delete(Integer credentialId) {
         return credentialMapper.delete(credentialId);
     }
 }

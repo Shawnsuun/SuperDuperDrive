@@ -34,7 +34,7 @@ public class NoteController {
     }
 
     @GetMapping("/deleteNote")
-    public String delete(@RequestParam("noteId") Integer noteId, Authentication authentication, Model model) {
+    public String deleteNote(@RequestParam("noteId") Integer noteId, Authentication authentication, Model model) {
         String userName = authentication.getName();
         Integer userId = userService.getUserId(userName);
 
