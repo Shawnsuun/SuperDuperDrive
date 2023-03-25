@@ -18,13 +18,20 @@ public class HomeController {
     private FileService fileService;
     private UserService userService;
 
+    public HomeController(NoteService noteService, CredentialService credentialService, EncryptionService encryptionService, FileService fileService, UserService userService) {
+        this.noteService = noteService;
+        this.credentialService = credentialService;
+        this.encryptionService = encryptionService;
+        this.fileService = fileService;
+        this.userService = userService;
+    }
 
-    @GetMapping("/home")
+    @GetMapping
     public String getHomePage(Authentication authentication, Note note, Credential credential, Model model){
         String username = authentication.getName();
-        model.addAttribute("homeNotes",this.noteService.getUserNotes(this.userService.getUserId(username)));
-        model.addAttribute("homeCredentials",this.credentialService.getUserCredentials(this.userService.getUserId(username)));
+        model.addAttribute("notes",this.noteService.getUserNotes(this.userService.getUserId(username)));
+        model.addAttribute("credentials",this.credentialService.getUserCredentials(this.userService.getUserId(username)));
         model.addAttribute("encryptionService", encryptionService);
-        model.addAttribute("homeFiles",this.fileService.getUserFiles(this.userService.getUserId(username)));
+        model.addAttribute("files",this.fileService.getUserFiles(this.userService.getUserId(username)));
         return "home";}
 }

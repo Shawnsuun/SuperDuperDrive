@@ -12,22 +12,28 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/credentials")
+@RequestMapping
 public class CredentialController {
     private CredentialService credentialService;
     private UserService userService;
 
-    public CredentialController(CredentialService credentialService, UserService userService) {
+    private EncryptionService encryptionService;
+
+    public CredentialController(CredentialService credentialService, UserService userService, EncryptionService encryptionService) {
         this.credentialService = credentialService;
         this.userService = userService;
+        this.encryptionService = encryptionService;
     }
 
     @PostMapping("/updateCredential")
     public String addOrUpdateCredential(@ModelAttribute("credential") Credential credential,
                                         Authentication authentication,
+                                        EncryptionService encryptionService,
                                         Model model) {
         Integer userId = userService.getUserId(authentication.getName());
         credential.setUserId(userId);
+        credential.setKey(userService.getUser(authentication.getName()).getSalt());
+        credential.setPassword(encryptionService.encryptValue(credential.getPassword(), userService.getUser(authentication.getName()).getSalt()));
         if (credential.getCredentialId() == null) {
             credentialService.addCredential(credential);
         } else {

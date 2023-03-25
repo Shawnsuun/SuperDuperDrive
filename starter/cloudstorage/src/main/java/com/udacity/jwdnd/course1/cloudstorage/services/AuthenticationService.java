@@ -18,6 +18,11 @@ public class AuthenticationService implements AuthenticationProvider {
     private UserMapper userMapper;
     private HashService hashService;
 
+    public AuthenticationService(UserMapper userMapper, HashService hashService) {
+        this.userMapper = userMapper;
+        this.hashService = hashService;
+    }
+
     /**
      * Takes an Authentication object from spring and returns an authentication token if the user's
      * credentials are correct.

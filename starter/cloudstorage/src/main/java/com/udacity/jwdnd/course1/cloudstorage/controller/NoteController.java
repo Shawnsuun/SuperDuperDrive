@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/notes")
+@RequestMapping
 public class NoteController {
     private NoteService noteService;
     private UserService userService;
@@ -28,8 +28,9 @@ public class NoteController {
         } else {
             noteService.update(note);
         }
-        model.addAttribute("notes", noteService.getUserNotes(userId));
         model.addAttribute("success", true);
+        model.addAttribute("notes", noteService.getUserNotes(userId));
+
         return "result";
     }
 

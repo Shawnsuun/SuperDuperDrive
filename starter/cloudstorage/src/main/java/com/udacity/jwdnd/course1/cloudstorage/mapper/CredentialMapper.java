@@ -12,25 +12,25 @@ public interface CredentialMapper {
     @Select("SELECT * FROM CREDENTIALS WHERE userId = #{userId}")
     List<Credential> getUserCredentials(Integer userId);
 
-    @Select("SELECT FROM CREDENTIALS WHERE credentialId = #{credentialId}")
+    @Select("SELECT * FROM CREDENTIALS WHERE credentialId = #{credentialId}")
     Credential getCredential(Integer credentialId);
 
     @Select("SELECT * FROM CREDENTIALS")
     List<Credential> getAllCredentials();
 
-    @Insert("INSERT INTO NOTES(credentialId, username, password, url, userId, key) VALUES (" +
-            "#{credentialId}, #{username}, #{password}, #{url}, #{userId}, #{key})")
-
+    @Insert("INSERT INTO CREDENTIALS(url, username, key, password, userId) VALUES (" +
+            "#{url}, #{username}, #{key}, #{password}, #{userId})")
     @Options(useGeneratedKeys = true, keyProperty = "credentialId")
     Integer addCredential(Credential credential);
 
-    @Update("UPDATE credentials " +
-            "SET username=#{username}, " +
+    @Update("UPDATE CREDENTIALS " +
+            "SET url=#{url} " +
+            "username=#{username}, " +
+            "key = #{key}, " +
             "password=#{password}, " +
-            "url=#{url} " +
             "WHERE credentialId = #{credentialId}")
     Integer update(Credential credential);
 
-    @Delete("DELETE FROM NOTES WHERE credentialId = #{credentialId}")
+    @Delete("DELETE FROM CREDENTIALS WHERE credentialId = #{credentialId}")
     Integer delete(Integer credentialId);
 }

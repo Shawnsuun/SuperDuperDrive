@@ -18,8 +18,9 @@ public class FileService {
     private FileMapper fileMapper;
     private UserMapper userMapper;
 
-    public FileService(FileMapper fileMapper) {
+    public FileService(FileMapper fileMapper, UserMapper userMapper) {
         this.fileMapper = fileMapper;
+        this.userMapper = userMapper;
     }
 
     @PostConstruct
@@ -46,7 +47,7 @@ public class FileService {
     public Integer addFile(MultipartFile uploadFile, String userName) throws IOException {
         Integer fileId = null;
         String fileName = uploadFile.getOriginalFilename();
-        Integer userId = userMapper.getUserId(userName);
+        Integer userId = userMapper.getUser(userName).getUserId();
         String contentType = uploadFile.getContentType();
         String fileSize = String.valueOf(uploadFile.getSize());
         byte[] fileData = uploadFile.getBytes();
@@ -54,9 +55,9 @@ public class FileService {
             new File(
                 fileId,
                 fileName,
-                userId,
                 contentType,
                 fileSize,
+                userId,
                 fileData));
     }
 

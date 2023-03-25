@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @Controller
-@RequestMapping("/files")
+@RequestMapping
 public class FileController {
     private FileService fileService;
     private UserService userService;
@@ -43,7 +43,8 @@ public class FileController {
         }
         Integer res = fileService.addFile(multipartFile, authentication.getName());
         model.addAttribute("success", "File uploaded successfully!");
-        return "result";
+        model.addAttribute("message", "File uploaded successfully!");
+        return "redirect:/home";
     }
 
     @GetMapping("/download")
@@ -74,10 +75,11 @@ public class FileController {
     public String delete(@RequestParam Integer fileId, Authentication authentication, Model model) {
         Integer rowsDeleted = fileService.delete(fileId);
         if (rowsDeleted > 0) {
-            model.addAttribute("success", "File deleted successfully!");
+            model.addAttribute("success", "File deleted");
+            model.addAttribute("message", "File deleted");
         } else {
             model.addAttribute("error", "There was an error deleting the file. Please try again.");
         }
-        return "result";
+        return "redirect:/home";
     }
 }
