@@ -12,6 +12,10 @@ import java.util.ArrayList;
 
 /**
  *  Allow Spring to integrate provider with authentication schemes
+ *  Service that performs business logic operations regarding food
+ *  This class needs to be a component, because our Controller has a reference to
+ *  it that it doesn't create itself. Marking this as a @Service lets Spring know
+ *  to make instances of this bean available to other classes, though @Component would work as well.
  */
 @Service
 public class AuthenticationService implements AuthenticationProvider {

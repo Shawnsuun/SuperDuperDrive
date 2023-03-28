@@ -1,7 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.model;
 
 public class File {
-    private Integer fileId;
+    private Integer fileId;     //related to the field of templates
     private String fileName;
     private Integer userId;
     private String contentType;
