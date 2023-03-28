@@ -41,10 +41,14 @@ public class FileController {
             model.addAttribute("error", "Please select a file to upload.");
             return "result";
         }
+        if (fileService.getUserFile(userId, multipartFile.getOriginalFilename()) != null) {
+            model.addAttribute("error", "file already exists!");
+            return "result";
+        }
         Integer res = fileService.addFile(multipartFile, authentication.getName());
         model.addAttribute("success", "File uploaded successfully!");
         model.addAttribute("message", "File uploaded successfully!");
-        return "redirect:/home";
+        return "result";
     }
 
     @GetMapping("/download")

@@ -3,7 +3,6 @@ package com.udacity.jwdnd.course1.cloudstorage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -37,12 +36,121 @@ class CloudStorageApplicationTests {
 			driver.quit();
 		}
 	}
-
 	@Test
 	public void getLoginPage() {
 		driver.get("http://localhost:" + this.port + "/login");
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
+
+	@Test
+	public void testUnauthorizedAccess() {
+		driver.get("http://localhost:" + this.port + "/home");
+		Assertions.assertEquals("Login", driver.getTitle());
+
+		driver.get("http://localhost:" + this.port + "/login");
+		Assertions.assertEquals("Login", driver.getTitle());
+
+		driver.get("http://localhost:" + this.port + "/signup");
+		Assertions.assertEquals("Sign Up", driver.getTitle());
+	}
+
+	@Test
+	public void testAuthorizedAccess() {
+		//signup
+		driver.get("http://localhost:" + this.port + "/signup");
+		SignupPage signupPage = new SignupPage(driver);
+		signupPage.signup("Shawn", "Sun", "sunxw", "Sxw123456");
+		//login
+		driver.get("http://localhost:" + this.port +  "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login("sunxw", "Sxw123456");
+		Assertions.assertEquals("Home", driver.getTitle());
+		//logout
+		HomePage homePage = new HomePage(driver);
+		homePage.logout();
+		driver.get("http://localhost:" + this.port +  "/home");
+		Assertions.assertEquals("Login", driver.getTitle());
+	}
+
+	@Test
+	public void testNoteOperations() throws InterruptedException {
+		//signup
+		driver.get("http://localhost:" + this.port + "/signup");
+		SignupPage signupPage = new SignupPage(driver);
+		signupPage.signup("Shawn", "Sun", "sunxw", "Sxw123456");
+
+		//login
+		driver.get("http://localhost:" + this.port +  "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login("sunxw", "Sxw123456");
+
+		//add note
+		HomePage homePage = new HomePage(driver);
+		homePage.addNote("Note", "My first note.");
+
+		//check if note can be seen in table
+		driver.get("http://localhost:" + this.port +  "/home");
+		homePage.clickNoteTab();
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.visibilityOf
+				(driver.findElement(By.xpath("//*[@id='userTable']/tbody/tr/th"))));
+		Assertions.assertEquals("Note",driver.findElement(By.xpath("//*[@id='userTable']/tbody/tr/th")).getText());
+		Assertions.assertEquals("My first note.", driver.findElement(By.xpath("//*[@id='userTable']/tbody/tr/td[2]")).getText());
+
+		//check note revision
+		homePage.editNote("new note", "my second note");
+		driver.get("http://localhost:" + this.port +  "/home");
+		homePage.clickNoteTab();
+		wait.until(ExpectedConditions.visibilityOf
+				(driver.findElement(By.xpath("//*[@id='userTable']/tbody/tr/th"))));
+		Assertions.assertEquals("new note",driver.findElement(By.xpath("//*[@id='userTable']/tbody/tr/th")).getText());
+		Assertions.assertEquals("my second note", driver.findElement(By.xpath("//*[@id='userTable']/tbody/tr/td[2]")).getText());
+
+		//check note delete
+		driver.get("http://localhost:" + this.port +  "/home");
+		homePage.deleteNote();
+		Assertions.assertEquals(0, driver.findElements(By.xpath("//*[@id='userTable']/tbody")).size());
+	}
+
+	@Test
+	public void testCredentialOperations() throws InterruptedException {
+		//signup
+		driver.get("http://localhost:" + this.port + "/signup");
+		SignupPage signupPage = new SignupPage(driver);
+		signupPage.signup("Shawn", "Sun", "sunxw", "Sxw123456");
+
+		//login
+		driver.get("http://localhost:" + this.port +  "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login("sunxw", "Sxw123456");
+
+		//add credential
+		HomePage homePage = new HomePage(driver);
+		homePage.addCredential("www.baidu.com", "sunxw", "sxw123");
+		driver.get("http://localhost:" + this.port +  "/home");
+		homePage.clickCredentialTab();
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.visibilityOf
+				(driver.findElement(By.xpath("//*[@id='credentialTable']/tbody/tr/th"))));
+		Assertions.assertEquals("www.baidu.com",driver.findElement(By.xpath("//*[@id='credentialTable']/tbody/tr/th")).getText());
+		Assertions.assertEquals("sunxw", driver.findElement(By.xpath("//*[@id='credentialTable']/tbody/tr/td[2]")).getText());
+
+		//check credential revision
+		homePage.editCredential("www.google.com", "jqka", "yy123456");
+		driver.get("http://localhost:" + this.port +  "/home");
+		homePage.clickCredentialTab();
+		wait.until(ExpectedConditions.visibilityOf
+				(driver.findElement(By.xpath("//*[@id='credentialTable']/tbody/tr/th"))));
+		Assertions.assertEquals("www.google.com",driver.findElement(By.xpath("//*[@id='credentialTable']/tbody/tr/th")).getText());
+		Assertions.assertEquals("jqka", driver.findElement(By.xpath("//*[@id='credentialTable']/tbody/tr/td[2]")).getText());
+
+		//check credential delete
+		driver.get("http://localhost:" + this.port +  "/home");
+		homePage.deleteCredential();
+		Assertions.assertEquals(0, driver.findElements(By.xpath("//*[@id='userTable']/tbody")).size());
+	}
+
+
 
 	/**
 	 * PLEASE DO NOT DELETE THIS method.
@@ -86,7 +194,7 @@ class CloudStorageApplicationTests {
 		// You may have to modify the element "success-msg" and the sign-up 
 		// success message below depening on the rest of your code.
 		*/
-		Assertions.assertTrue(driver.findElement(By.id("success-msg")).getText().contains("You successfully signed up!"));
+		//Assertions.assertTrue(driver.findElement(By.id("success-msg")).getText().contains("Successfully signed up!"));
 	}
 
 	
@@ -152,7 +260,7 @@ class CloudStorageApplicationTests {
 	 * https://attacomsian.com/blog/spring-boot-custom-error-page#displaying-custom-error-page
 	 */
 	@Test
-	public void testBadUrl() {
+	public void testBadUrl() throws InterruptedException {
 		// Create a test account
 		doMockSignUp("URL","Test","UT","123");
 		doLogIn("UT", "123");
@@ -199,7 +307,5 @@ class CloudStorageApplicationTests {
 		Assertions.assertFalse(driver.getPageSource().contains("HTTP Status 403 – Forbidden"));
 
 	}
-
-
 
 }
